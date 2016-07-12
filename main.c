@@ -1,11 +1,13 @@
 #include <asf.h>
+#include <stdio.h>
 #include "conf_usb.h"
+#include "main.h"
+#include "testtool.h"
 
 static volatile bool cdc_en = false;
 
-#define FSTR(s) (__extension__({static char const __flash __c[] = (s); &__c[0];}))
-
-void cdc_puts(char const __memx * s);
+int cdc_putchar(char c, FILE *stream);
+FILE uart_output = FDEV_SETUP_STREAM(&cdc_putchar, NULL, _FDEV_SETUP_WRITE);
 
 int main(void)
 {
@@ -19,6 +21,7 @@ int main(void)
 
 	// Start USB stack to authorize VBus monitoring
 	udc_start();
+    stdout = &uart_output;
 
     PORTF.DIRSET = 0xf0;
 
@@ -29,13 +32,18 @@ int main(void)
         int c = udi_cdc_getc();
         if (c <= 0 || c > 255) continue;
         if (bufpos < sizeof(cmdbuf) - 2) {
-            cmdbuf[bufpos++] = c;
+            if (c == 8 || c == 127) {
+                cmdbuf[bufpos--] = 0;
+            } else {
+                cmdbuf[bufpos++] = c;
+            }
+            udi_cdc_putc(c);
         }
 
-        if (c == '\n') {
+        if (c == '\n' || c == '\r') {
             if (bufpos < sizeof(cmdbuf) - 2) {
                 cmdbuf[bufpos++] = 0;
-                cdc_puts(cmdbuf);
+                handle_command(cmdbuf);
             } else {
                 cdc_puts(FSTR("error: buffer overflow\r\n"));
             }
@@ -44,11 +52,20 @@ int main(void)
     }
 }
 
+int cdc_putchar(char c, FILE *stream)
+{
+    if (c == '\n') {
+        cdc_putchar('\r', 0);
+    }
+    while (!udi_cdc_is_tx_ready());
+    udi_cdc_putc(c);
+    return 0;
+}
+
 void cdc_puts(char const __memx * s)
 {
     while (*s) {
-        while (!udi_cdc_is_tx_ready());
-        udi_cdc_putc(*s++);
+        cdc_putchar(*s++, 0);
     }
 }
 
