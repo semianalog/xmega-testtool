@@ -58,7 +58,6 @@ CSRCS = \
        xmega/drivers/nvm/nvm.c                            \
        xmega/drivers/usart/usart.c                        \
        xmega/drivers/usb/usb_device.c					  \
-	   ../ui.c											  \
 	   ../main.c										  \
 
 # Assembler source files located from the top-level source directory
@@ -97,10 +96,10 @@ LIBS =
 
 # Additional options for debugging. By default the common Makefile.in will
 # add -gdwarf-2.
-DBGFLAGS = 
+DBGFLAGS = -g
 
 # Optimization settings
-OPTIMIZATION = -Os
+OPTIMIZATION = -O2
 
 # Extra flags used when creating an EEPROM Intel HEX file. By default the
 # common Makefile.in will add -j .eeprom
@@ -118,7 +117,7 @@ ARFLAGS =
 ASFLAGS = 
 
 # Extra flags to use when compiling.
-CFLAGS = -flto -g
+CFLAGS = -flto
 
 # Extra flags to use when preprocessing.
 #
@@ -135,7 +134,7 @@ CPPFLAGS = \
 
 # Extra flags to use when linking
 LDFLAGS =  \
-       -Wl,--section-start=.BOOT=0x20000                 
+       -Wl,--section-start=.BOOT=0x20000 -g
 
 # Pre- and post-build commands
 PREBUILD_CMD = 
