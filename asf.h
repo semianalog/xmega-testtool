@@ -101,7 +101,7 @@
 #include <compiler.h>
 #include <status_codes.h>
 
-// From module: XMEGA-A1U Xplained Pro
-#include <xmega_a1u_xplained_pro.h>
+// From module: Semianalog XMEGA AU development board
+#include <audev.h>
 
 #endif // ASF_H

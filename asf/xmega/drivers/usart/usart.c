@@ -87,6 +87,7 @@ bool usart_init_rs232(USART_t *usart, const usart_rs232_options_t *opt)
 	return result;
 }
 
+#if 0
 /**
  * \brief Initialize USART in SPI master mode.
  *
@@ -205,6 +206,7 @@ void usart_init_spi(USART_t *usart, const usart_spi_options_t *opt)
 	usart_tx_enable(usart);
 	usart_rx_enable(usart);
 }
+#endif
 
 /**
  * \brief Send a data with the USART module

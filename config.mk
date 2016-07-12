@@ -44,7 +44,7 @@ MCU = atxmega128a1u
 
 # Application target name. Given with suffix .a for library and .elf for a
 # standalone application.
-TARGET = device_example.elf
+TARGET = xmega-testtool.elf
 
 # C source files located from the top-level source directory
 CSRCS = \
@@ -54,7 +54,7 @@ CSRCS = \
        common/services/usb/class/cdc/device/udi_cdc.c     \
        common/services/usb/class/cdc/device/udi_cdc_desc.c \
        common/services/usb/udc/udc.c                      \
-       xmega/boards/xmega_a1u_xplained_pro/board_init.c   \
+       xmega/boards/audev/board_init.c   				  \
        xmega/drivers/nvm/nvm.c                            \
        xmega/drivers/usart/usart.c                        \
        xmega/drivers/usb/usb_device.c					  \
@@ -76,12 +76,10 @@ INC_PATH = \
        common/services/usb                                \
        common/services/usb/class/cdc                      \
        common/services/usb/class/cdc/device               \
-       common/services/usb/class/cdc/device/example       \
-       common/services/usb/class/cdc/device/example/atxmega128a1u_xmega_a1u_xplained_pro \
        common/services/usb/udc                            \
        common/utils                                       \
        xmega/boards                                       \
-       xmega/boards/xmega_a1u_xplained_pro                \
+       xmega/boards/audev                \
        xmega/drivers/cpu                                  \
        xmega/drivers/nvm                                  \
        xmega/drivers/pmic                                 \
@@ -90,7 +88,6 @@ INC_PATH = \
        xmega/drivers/usb                                  \
        xmega/utils                                        \
        xmega/utils/preprocessor \
-       common/services/usb/class/cdc/device/example/atxmega128a1u_xmega_a1u_xplained_pro/gcc \
 	   ../
 
 # Library paths from the top-level source directory
@@ -122,7 +119,7 @@ ARFLAGS =
 ASFLAGS = 
 
 # Extra flags to use when compiling.
-CFLAGS = 
+CFLAGS = -flto -g
 
 # Extra flags to use when preprocessing.
 #
@@ -134,7 +131,7 @@ CFLAGS =
 #   BOARD      Target board in use, see boards/board.h for a list.
 #   EXT_BOARD  Optional extension board in use, see boards/board.h for a list.
 CPPFLAGS = \
-       -D BOARD=XMEGA_A1U_XPLAINED_PRO                    \
+       -D BOARD=SEMIANALOG_AU_DEV	\
        -D IOPORT_XMEGA_COMPAT
 
 # Extra flags to use when linking
