@@ -81,19 +81,12 @@ void main_resume_action(void);
  */
 void main_cdc_set_dtr(uint8_t port, bool b_enable);
 
-#ifdef USB_DEVICE_LPM_SUPPORT
-/*! \brief Enters the application in low power mode
- * Callback called when USB host sets LPM suspend state
- */
-void main_suspend_lpm_action(void);
+void main_rx_notify(uint8_t port);
 
-/*! \brief Called by UDC when USB Host request to enable LPM remote wakeup
- */
-void main_remotewakeup_lpm_enable(void);
+void main_config(uint8_t port, usb_cdc_line_coding_t *cfg);
 
-/*! \brief Called by UDC when USB Host request to disable LPM remote wakeup
- */
-void main_remotewakeup_lpm_disable(void);
-#endif
+void main_open(uint8_t port);
+
+void main_close(uint8_t port);
 
 #endif // _MAIN_H_

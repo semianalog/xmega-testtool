@@ -60,7 +60,6 @@ CSRCS = \
        xmega/drivers/usb/usb_device.c					  \
 	   ../ui.c											  \
 	   ../main.c										  \
-	   ../uart_xmega.c							          \
 
 # Assembler source files located from the top-level source directory
 ASSRCS = \
