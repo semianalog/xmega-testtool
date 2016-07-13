@@ -60,6 +60,7 @@ CSRCS = \
        xmega/drivers/usb/usb_device.c					  \
 	   ../main.c										  \
 	   ../testtool.c						  \
+	   ../microrl/src/microrl.c					\
 
 # Assembler source files located from the top-level source directory
 ASSRCS = \
@@ -87,7 +88,8 @@ INC_PATH = \
        xmega/drivers/usb                                  \
        xmega/utils                                        \
        xmega/utils/preprocessor \
-	   ../
+	   ../						\
+	   ../microrl/src			\
 
 # Library paths from the top-level source directory
 LIB_PATH = 
