@@ -1,53 +1,30 @@
-# List of available make goals:
-#
-# all                     Default goal: build the project
-# clean                   Clean up the project
-# rebuild                 Rebuild the project
-#
-# doc                     Build the documentation
-# cleandoc                Clean up the documentation
-# rebuilddoc              Rebuild the documentation
-#
-#
-# Copyright (c) 2010 Atmel Corporation. All rights reserved.
-#
-# \asf_license_start
-#
-# \page License
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions are met:
-#
-# 1. Redistributions of source code must retain the above copyright notice,
-#    this list of conditions and the following disclaimer.
-#
-# 2. Redistributions in binary form must reproduce the above copyright notice,
-#    this list of conditions and the following disclaimer in the documentation
-#    and/or other materials provided with the distribution.
-#
-# 3. The name of Atmel may not be used to endorse or promote products derived
-#    from this software without specific prior written permission.
-#
-# 4. This software may only be redistributed and used in connection with an
-#    Atmel microcontroller product.
-#
-# THIS SOFTWARE IS PROVIDED BY ATMEL "AS IS" AND ANY EXPRESS OR IMPLIED
-# WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
-# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT ARE
-# EXPRESSLY AND SPECIFICALLY DISCLAIMED. IN NO EVENT SHALL ATMEL BE LIABLE FOR
-# ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-# OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-# HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-# STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
-# ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-# POSSIBILITY OF SUCH DAMAGE.
-#
-# \asf_license_stop
-#
+PROJECT = xmega-testtool
 
-# Include the common Makefile, which will also include the project specific
-# config.mk file.
-MAKEFILE_PATH = asf/common/utils/make/Makefile.avr.in
+CSOURCES_XMEGASER = $(shell find xmegaser -name '*.c')
+SSOURCES_XMEGASER = $(shell find xmegaser -name '*.s')
+OBJECTS_XMEGASER = $(patsubst %.c,%.o,${CSOURCES_XMEGASER}) $(patsubst %.s,%.o,${SSOURCES_XMEGASER})
 
-include $(MAKEFILE_PATH)
+OBJECTS = main.o testtool.o esh/esh.o ${OBJECTS_XMEGASER}
+
+CC = avr-gcc
+AS = avr-as
+OBJDUMP = avr-objdump
+SIZE = avr-size
+
+CFLAGS = -mmcu=atxmega128a1u -DF_CPU=24000000uLL -std=gnu11 -Wall -Wextra -Werror \
+		 -O2 -g -flto -Iesh -Ixmegaser -iquote.
+
+.PHONY:	all clean
+
+all:	${PROJECT}.elf ${PROJECT}.disasm
+
+%.disasm: %.elf
+	${OBJDUMP} -S $< > $@
+
+${PROJECT}.elf:	${OBJECTS}
+	${CC} -o $@ ${CFLAGS} ${LDFLAGS} $^
+	${SIZE} $@
+
+clean:
+	rm -f ${PROJECT}.elf ${PROJECT}.disasm ${OBJECTS}
+

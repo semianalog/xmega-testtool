@@ -1,0 +1,27 @@
+USB clocking
+------------
+
+In most cases, it is the responsibility of the user to configure the USB clock.
+If USB_DEVICE_LOW_SPEED is defined in conf_usb.h, clkUSB should be 6 MHz.
+Otherwise it should be 48 MHz. The following clock configurations are provided
+and can be used if they are sufficient:
+
+    xmegaser_clock_fast_nopll();
+        Fastest configuration that can be used without the PLL.
+
+        intRC at 48MHz -----+---------------> USB (48 MHz)
+                            |
+                            +----(div 2)----> sysclk (24 MHz)
+
+    xmegaser_clock_fast_pll();
+        Fastest configuration that can be used with the PLL.
+
+        intRC at 32 MHz ----+-(pll *3)---(div 2)---> USB (48 MHz)
+                            |
+                            +----------------------> sysclk (32 MHz)
+
+    xmegaser_enable_dfll(DFLL_INTERNAL);
+    xmegaser_enable_dfll(DFLL_EXTERNAL);
+        Augments xmegaser_clock_fast_pll() with the DFLL, locked either to the
+        internal precision 32.768 kHz oscillator, or to an external
+        32.768 kHz crystal.

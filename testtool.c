@@ -129,6 +129,8 @@ err:
 
 void cmd_help(int argc, char * * argv)
 {
+    (void) argc;
+    (void) argv;
     printf_P(PSTR("parse VALUE              parse VALUE as integer and print (debug)\n"));
     printf_P(PSTR("                       > parse 0x12\n"));
     printf_P(PSTR("                      >> 18\n"));

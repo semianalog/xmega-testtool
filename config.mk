@@ -48,7 +48,6 @@ TARGET = xmega-testtool.elf
 
 # C source files located from the top-level source directory
 CSRCS = \
-       common/services/clock/xmega/sysclk.c               \
        common/services/ioport/xmega/ioport_compat.c       \
        common/services/sleepmgr/xmega/sleepmgr.c          \
        common/services/usb/class/cdc/device/udi_cdc.c     \
@@ -56,7 +55,6 @@ CSRCS = \
        common/services/usb/udc/udc.c                      \
        xmega/boards/audev/board_init.c   				  \
        xmega/drivers/nvm/nvm.c                            \
-       xmega/drivers/usart/usart.c                        \
        xmega/drivers/usb/usb_device.c					  \
 	   ../main.c										  \
 	   ../testtool.c						  \
@@ -70,7 +68,6 @@ ASSRCS = \
 # Include path located from the top-level source directory
 INC_PATH = \
        common/boards                                      \
-       common/services/clock                              \
        common/services/ioport                             \
        common/services/sleepmgr                           \
        common/services/usb                                \
@@ -84,7 +81,6 @@ INC_PATH = \
        xmega/drivers/nvm                                  \
        xmega/drivers/pmic                                 \
        xmega/drivers/sleep                                \
-       xmega/drivers/usart                                \
        xmega/drivers/usb                                  \
        xmega/utils                                        \
        xmega/utils/preprocessor \

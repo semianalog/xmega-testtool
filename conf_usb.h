@@ -47,9 +47,6 @@
 #ifndef _CONF_USB_H_
 #define _CONF_USB_H_
 
-#include "compiler.h"
-#include "board.h"
-
 /**
  * USB Device Configuration
  * @{
@@ -92,32 +89,6 @@
 
 
 /**
- * USB Device Callbacks definitions (Optional)
- * @{
- */
-#define  UDC_VBUS_EVENT(b_vbus_high)
-#define  UDC_SOF_EVENT()                  main_sof_action()
-#define  UDC_SUSPEND_EVENT()              main_suspend_action()
-#define  UDC_RESUME_EVENT()               main_resume_action()
-//! Mandatory when USB_DEVICE_ATTR authorizes remote wakeup feature
-// #define  UDC_REMOTEWAKEUP_ENABLE()        user_callback_remotewakeup_enable()
-// extern void user_callback_remotewakeup_enable(void);
-// #define  UDC_REMOTEWAKEUP_DISABLE()       user_callback_remotewakeup_disable()
-// extern void user_callback_remotewakeup_disable(void);
-#ifdef USB_DEVICE_LPM_SUPPORT
-#define  UDC_SUSPEND_LPM_EVENT()          main_suspend_lpm_action()
-#define  UDC_REMOTEWAKEUP_LPM_ENABLE()    main_remotewakeup_lpm_enable()
-#define  UDC_REMOTEWAKEUP_LPM_DISABLE()   main_remotewakeup_lpm_disable()
-#endif
-//! When a extra string descriptor must be supported
-//! other than manufacturer, product and serial string
-// #define  UDC_GET_EXTRA_STRING()
-//@}
-
-//@}
-
-
-/**
  * USB Interface Configuration
  * @{
  */
@@ -126,17 +97,9 @@
  * @{
  */
 
-//! Define two USB communication ports
 #define  UDI_CDC_PORT_NB 1
 
 //! Interface callback definition
-#define  UDI_CDC_ENABLE_EXT(port)         main_cdc_enable(port)
-#define  UDI_CDC_DISABLE_EXT(port)        main_cdc_disable(port)
-#define  UDI_CDC_RX_NOTIFY(port)          main_rx_notify(port)
-#define  UDI_CDC_TX_EMPTY_NOTIFY(port)
-#define  UDI_CDC_SET_CODING_EXT(port,cfg) main_config(port,cfg)
-#define  UDI_CDC_SET_DTR_EXT(port,set)    main_cdc_set_dtr(port,set)
-#define  UDI_CDC_SET_RTS_EXT(port,set)
 
 //! Define it when the transfer CDC Device to Host is a low rate (<512000 bauds)
 //! to reduce CDC buffers size
@@ -161,8 +124,6 @@
  */
 //@}
 
-//! The includes of classes and other headers must be done at the end of this file to avoid compile error
-#include "udi_cdc_conf.h"
 #include "main.h"
 
 #endif // _CONF_USB_H_

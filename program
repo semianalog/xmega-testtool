@@ -2,3 +2,4 @@
 
 make &&
 dfu-programmer atxmega128a1u flash --force xmega-testtool.hex
+dfu-programmer atxmega128a1u launch
