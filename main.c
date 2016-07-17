@@ -3,6 +3,7 @@
 #include "main.h"
 #include "testtool.h"
 #include <esh.h>
+#include <xmegaser.h>
 #include <xmegaser_usb.h>
 #include <avr/pgmspace.h>
 #include <avr/interrupt.h>
@@ -26,7 +27,7 @@ int main(void)
     PMIC.CTRL = PMIC_LOLVLEN_bm | PMIC_MEDLVLEN_bm | PMIC_HILVLEN_bm;
     sei();
 
-	// Start USB stack to authorize VBus monitoring
+    xmegaser_clock_fast_nopll();
     xmegaser_usb_init();
     stdout = &uart_output;
 
@@ -41,26 +42,6 @@ int main(void)
         if (c <= 0 || c > 255) continue;
         if (c == '\r') c = '\n';
         esh_rx(&esh, c);
-        /*
-        if (bufpos < sizeof(cmdbuf) - 2) {
-            if (c == 8 || c == 127) {
-                cmdbuf[bufpos--] = 0;
-            } else {
-                cmdbuf[bufpos++] = c;
-            }
-            udi_cdc_putc(c);
-        }
-
-        if (c == '\n' || c == '\r') {
-            if (bufpos < sizeof(cmdbuf) - 2) {
-                cmdbuf[bufpos++] = 0;
-                handle_command(cmdbuf);
-            } else {
-                cdc_puts(FSTR("error: buffer overflow\r\n"));
-            }
-            bufpos = 0;
-        }
-        */
     }
 }
 
