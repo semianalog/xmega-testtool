@@ -15,4 +15,10 @@
 #define  UDC_SUSPEND_EVENT()              xmegaser__suspend_action()
 #define  UDC_RESUME_EVENT()               xmegaser__resume_action()
 
+#define  UDI_CDC_PORT_NB            1
+#define  UDI_CDC_DEFAULT_RATE       115200
+#define  UDI_CDC_DEFAULT_STOPBITS   CDC_STOP_BITS_1
+#define  UDI_CDC_DEFAULT_PARITY     CDC_PAR_NONE
+#define  UDI_CDC_DEFAULT_DATABITS   8
+
 #endif // XMEGASER_CONF_USB_H
