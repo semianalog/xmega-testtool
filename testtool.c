@@ -8,35 +8,20 @@
 
 void upcase(char *s);
 int16_t parse_number(char *num);
-void cmd_parse(char *arg);
-void cmd_port(char *arg);
-void cmd_help(char *arg);
+void cmd_parse(int argc, char ** argv);
+void cmd_port(int argc, char ** argv);
+void cmd_help(int argc, char ** argv);
 
-void handle_command(char *cmd)
+void handle_command(int argc, char ** argv)
 {
-    // Remove \r\n
-    char *term;
-    term = strchr(cmd, '\r');
-    if (term) *term = 0;
-    term = strchr(cmd, '\n');
-    if (term) *term = 0;
-
-    // Split cmd and arg
-    char *arg = strchr(cmd, ' ');
-    while (arg && isspace(*arg)) {
-        *arg = 0;
-        ++arg;
-    }
-
-    printf_P(PSTR("\n"));
-    if (!strcmp_P(cmd, PSTR("parse"))) {
-        cmd_parse(arg);
-    } else if (!strcmp_P(cmd, PSTR("port"))) {
-        cmd_port(arg);
-    } else if (!strcmp_P(cmd, PSTR("help"))) {
-        cmd_help(arg);
+    if (!strcmp_P(argv[0], PSTR("parse"))) {
+        cmd_parse(argc, argv);
+    } else if (!strcmp_P(argv[0], PSTR("port"))) {
+        cmd_port(argc, argv);
+    } else if (!strcmp_P(argv[0], PSTR("help"))) {
+        cmd_help(argc, argv);
     } else {
-        printf_P(PSTR("unknown command: %s\ntry 'help'\n"), cmd);
+        printf_P(PSTR("unknown command: %s\ntry 'help'\n"), argv[0]);
     }
 }
 
@@ -70,19 +55,30 @@ void upcase(char *s)
     }
 }
 
-void cmd_parse(char *arg)
+void cmd_parse(int argc, char * * argv)
 {
-    printf_P(PSTR("%d\n"), parse_number(arg));
+    if (argc < 2) {
+        puts_P(PSTR("parse: expected arguments\n"));
+    } else {
+        for (int i = 1; i < argc; ++i) {
+            printf_P(PSTR("%d\n"), parse_number(argv[i]));
+        }
+    }
 }
 
-void cmd_port(char *arg)
+void cmd_port(int argc, char * * argv)
 {
     // port F dirset 0xff
     char *port, *field, *value;
 
-    port = strtok(arg, " ");
-    field = strtok(NULL, " ");
-    value = strtok(NULL, " ");
+    if (argc != 4) {
+        puts_P(PSTR("port: expected arguments PORT FIELD VALUE\n"));
+        return;
+    }
+
+    port = argv[1];
+    field = argv[2];
+    value = argv[3];
     upcase(port);
     upcase(field);
     upcase(value);
@@ -131,7 +127,7 @@ err:
     printf_P(PSTR("unknown error\n"));
 }
 
-void cmd_help(char *arg)
+void cmd_help(int argc, char * * argv)
 {
     printf_P(PSTR("parse VALUE              parse VALUE as integer and print (debug)\n"));
     printf_P(PSTR("                       > parse 0x12\n"));

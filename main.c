@@ -3,11 +3,19 @@
 #include "conf_usb.h"
 #include "main.h"
 #include "testtool.h"
+#include <esh.h>
 
 static volatile bool cdc_en = false;
 
 int cdc_putchar(char c, FILE *stream);
 FILE uart_output = FDEV_SETUP_STREAM(&cdc_putchar, NULL, _FDEV_SETUP_WRITE);
+
+struct esh esh;
+
+static void print_callback(struct esh const * esh, char const * s)
+{
+    printf_P(PSTR("%s"), s);
+}
 
 int main(void)
 {
@@ -23,6 +31,10 @@ int main(void)
 	udc_start();
     stdout = &uart_output;
 
+    esh_init(&esh);
+    esh_register_callback(&esh, &handle_command);
+    esh_register_print(&esh, &print_callback);
+
     PORTF.DIRSET = 0xf0;
 
     char cmdbuf[100] = "";
@@ -31,6 +43,9 @@ int main(void)
     for (;;) {
         int c = udi_cdc_getc();
         if (c <= 0 || c > 255) continue;
+        if (c == '\r') c = '\n';
+        esh_rx(&esh, c);
+        /*
         if (bufpos < sizeof(cmdbuf) - 2) {
             if (c == 8 || c == 127) {
                 cmdbuf[bufpos--] = 0;
@@ -49,6 +64,7 @@ int main(void)
             }
             bufpos = 0;
         }
+        */
     }
 }
 
