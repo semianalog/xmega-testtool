@@ -27,7 +27,8 @@ int main(void)
     PMIC.CTRL = PMIC_LOLVLEN_bm | PMIC_MEDLVLEN_bm | PMIC_HILVLEN_bm;
     sei();
 
-    xmegaser_clock_fast_nopll();
+    xmegaser_clock_fast_pll();
+    xmegaser_enable_dfll(DFLL_EXTERNAL);
     xmegaser_usb_init();
     stdout = &uart_output;
 
