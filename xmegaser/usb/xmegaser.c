@@ -1,7 +1,7 @@
 #include <xmegaser_usb.h>
 #include <inttypes.h>
-#include <usb/asf/common/services/usb/udc/udc.h>
-#include <usb/asf/common/services/usb/class/cdc/device/udi_cdc.h>
+#include <usb/asf/udc.h>
+#include <usb/asf/udi_cdc.h>
 
 void xmegaser_usb_init(void)
 {

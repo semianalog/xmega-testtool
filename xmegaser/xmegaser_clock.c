@@ -1,5 +1,5 @@
 #include <xmegaser.h>
-#include <usb/asf/xmega/drivers/nvm/nvm.h>
+#include <usb/asf/nvm.h>
 
 void xmegaser_clock_fast_nopll(void)
 {

@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include "conf_usb.h"
 #include "main.h"
 #include "testtool.h"
 #include <esh.h>

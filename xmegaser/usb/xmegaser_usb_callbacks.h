@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 #include <inttypes.h>
-#include <usb/asf/common/services/usb/class/cdc/usb_protocol_cdc.h>
+#include <usb/asf/usb_protocol_cdc.h>
 
 bool xmegaser__cdc_enable(uint8_t port);
 void xmegaser__cdc_disable(uint8_t port);
