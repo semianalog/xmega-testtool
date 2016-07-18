@@ -10,6 +10,8 @@ void upcase(char *s);
 int16_t parse_number(char *num);
 void cmd_parse(int argc, char ** argv);
 void cmd_port(int argc, char ** argv);
+void cmd_peek(int argc, char ** argv);
+void cmd_poke(int argc, char ** argv);
 void cmd_help(int argc, char ** argv);
 
 void handle_command(int argc, char ** argv)
@@ -18,6 +20,10 @@ void handle_command(int argc, char ** argv)
         cmd_parse(argc, argv);
     } else if (!strcmp_P(argv[0], PSTR("port"))) {
         cmd_port(argc, argv);
+    } else if (!strcmp_P(argv[0], PSTR("peek"))) {
+        cmd_peek(argc, argv);
+    } else if (!strcmp_P(argv[0], PSTR("poke"))) {
+        cmd_poke(argc, argv);
     } else if (!strcmp_P(argv[0], PSTR("help"))) {
         cmd_help(argc, argv);
     } else {
@@ -63,6 +69,27 @@ void cmd_parse(int argc, char * * argv)
         for (int i = 1; i < argc; ++i) {
             printf_P(PSTR("%d\n"), parse_number(argv[i]));
         }
+    }
+}
+
+void cmd_peek(int argc, char ** argv)
+{
+    if (argc != 2) {
+        puts_P(PSTR("peek: expected ADDRESS"));
+    } else {
+        uint8_t volatile * p = (uint8_t volatile *) parse_number(argv[1]);
+        printf_P(PSTR("*0x%04x = 0x%02x\n"), (uint16_t) p, *p);
+    }
+}
+
+void cmd_poke(int argc, char ** argv)
+{
+    if (argc != 3) {
+        puts_P(PSTR("poke: expected ADDRESS VALUE"));
+    } else {
+        uint8_t volatile * p = (uint8_t volatile *) parse_number(argv[1]);
+        uint8_t val = parse_number(argv[2]);
+        *p = val;
     }
 }
 
@@ -138,5 +165,11 @@ void cmd_help(int argc, char * * argv)
     printf_P(PSTR("port PORT FIELD VALUE    set PORT.FIELD = VALUE\n"));
     printf_P(PSTR("                         supported FIELDs: {OUT,DIR}{,SET,CLR,TGL}\n"));
     printf_P(PSTR("                       > port F OUTSET 0xf0\n"));
+    printf_P(PSTR("\n"));
+    printf_P(PSTR("peek ADDRESS             display the contents of ADDRESS\n"));
+    printf_P(PSTR("                       > peek 0x06A0\n"));
+    printf_P(PSTR("\n"));
+    printf_P(PSTR("poke ADDRESS VALUE       load VALUE into ADDRESS\n"));
+    printf_P(PSTR("                       > poke 0x06A0 0xf0\n"));
     printf_P(PSTR("\n"));
 }
