@@ -6,6 +6,7 @@
 #include <xmegaser_usb.h>
 #include <avr/pgmspace.h>
 #include <avr/interrupt.h>
+#include <util/delay.h>
 
 static volatile bool cdc_en = false;
 
@@ -28,14 +29,13 @@ int main(void)
 
     xmegaser_clock_fast_pll();
     xmegaser_enable_dfll(DFLL_EXTERNAL);
+
     xmegaser_usb_init();
     stdout = &uart_output;
 
     esh_init(&esh);
     esh_register_callback(&esh, &handle_command);
     esh_register_print(&esh, &print_callback);
-
-    PORTF.DIRSET = 0xf0;
 
     for (;;) {
         int c = xmegaser_usb_getc();

@@ -36,6 +36,7 @@
  */
 
 #include "xmegaser_config.h"
+#include <usb/xmegaser_conf_usb.h>
 #include <usb/asf/udi_cdc_conf.h>
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
@@ -426,15 +427,8 @@ void udd_enable(void)
 	Assert(!(MCU_REVID < 0x0A));
 #endif
 
-#ifdef CONFIG_OSC_AUTOCAL_RC32MHZ_REF_OSC
-# if CONFIG_OSC_AUTOCAL_RC32MHZ_REF_OSC == OSC_ID_USBSOF
-	// RC oscillator calibration via USB Start Of Frame is not available
-	// in low speed mode.
-	// Thus, the calibration is disabled
-	// when USB interface start in low speed mode
-	DFLLRC32M.CTRL = 0;
-# endif
-#endif
+    uint8_t dfll_save = DFLLRC32M.CTRL;
+    DFLLRC32M.CTRL = 0;
 
 #ifdef USB_DEVICE_LOW_SPEED
 	// The USB hardware need of 6MHz in low speed mode
@@ -446,15 +440,7 @@ void udd_enable(void)
 	udd_set_full_speed();
 #endif
 
-// The XMEGA_A1U does not support the RC calibration through Keepalive (Low speed).
-#if (!defined USB_DEVICE_LOW_SPEED) || (!XMEGA_A1U)
-# ifdef CONFIG_OSC_AUTOCAL_RC32MHZ_REF_OSC
-#   if CONFIG_OSC_AUTOCAL_RC32MHZ_REF_OSC == OSC_ID_USBSOF
-	// The SOF calibration can be enabled
-	DFLLRC32M.CTRL = DFLL_ENABLE_bm;
-#   endif
-# endif
-#endif
+    DFLLRC32M.CTRL = dfll_save;
 
 	flags = cpu_irq_save();
 

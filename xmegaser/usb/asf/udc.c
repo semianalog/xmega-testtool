@@ -38,6 +38,7 @@
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 
 #include "xmegaser_config.h"
+#include <usb/xmegaser_conf_usb.h>
 #include <inttypes.h>
 #include <usb/asf/compiler.h>
 #include <usb/asf/usb_protocol.h>

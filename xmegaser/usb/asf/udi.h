@@ -39,6 +39,7 @@
 #define _UDI_H_
 
 #include "xmegaser_config.h"
+#include <usb/xmegaser_conf_usb.h>
 #include <usb/asf/usb_protocol.h>
 
 #ifdef __cplusplus

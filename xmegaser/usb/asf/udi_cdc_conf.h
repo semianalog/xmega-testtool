@@ -40,6 +40,7 @@
 
 #include <usb/asf/usb_protocol_cdc.h>
 #include "xmegaser_config.h"
+#include <usb/xmegaser_conf_usb.h>
 
 #ifndef  UDI_CDC_PORT_NB
 # define  UDI_CDC_PORT_NB 1

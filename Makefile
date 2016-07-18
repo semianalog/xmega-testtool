@@ -9,14 +9,18 @@ OBJECTS = main.o testtool.o esh/esh.o ${OBJECTS_XMEGASER}
 CC = avr-gcc
 AS = avr-as
 OBJDUMP = avr-objdump
+OBJCOPY = avr-objcopy
 SIZE = avr-size
 
-CFLAGS = -mmcu=atxmega128a1u -DF_CPU=24000000uLL -std=gnu11 -Wall -Wextra -Werror \
+CFLAGS = -mmcu=atxmega128a1u -DF_CPU=32000000uLL -std=gnu11 -Wall -Wextra -Werror \
 		 -O2 -g -flto -Iesh -Ixmegaser -iquote.
 
 .PHONY:	all clean
 
-all:	${PROJECT}.elf ${PROJECT}.disasm
+all:	${PROJECT}.hex ${PROJECT}.disasm
+
+%.hex: %.elf
+	${OBJCOPY} -O ihex $< $@
 
 %.disasm: %.elf
 	${OBJDUMP} -S $< > $@
@@ -26,5 +30,5 @@ ${PROJECT}.elf:	${OBJECTS}
 	${SIZE} $@
 
 clean:
-	rm -f ${PROJECT}.elf ${PROJECT}.disasm ${OBJECTS}
+	rm -f ${PROJECT}.hex ${PROJECT}.elf ${PROJECT}.disasm ${OBJECTS}
 

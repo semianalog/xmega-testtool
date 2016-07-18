@@ -6,7 +6,6 @@ void xmegaser_clock_fast_nopll(void)
     // intRC at 48 MHz
     // div2 sysclk
     OSC.CTRL |= OSC_RC32MEN_bm;
-    while (!(OSC.CTRL & OSC_RC32MRDY_bm));
 
     uint8_t msb = nvm_read_production_signature_row(
             nvm_get_production_signature_row_offset(USBRCOSC));
@@ -14,12 +13,15 @@ void xmegaser_clock_fast_nopll(void)
             nvm_get_production_signature_row_offset(USBRCOSCA));
     DFLLRC32M.CALA = lsb;
     DFLLRC32M.CALB = msb;
+    DFLLRC32M.COMP1 = 0x80;
+    DFLLRC32M.COMP2 = 0xbb;
     OSC.DFLLCTRL = OSC_RC32MCREF_USBSOF_gc;
     DFLLRC32M.CTRL = DFLL_ENABLE_bm;
+    while (!(OSC.CTRL & OSC_RC32MRDY_bm));
 
     _PROTECTED_WRITE(CLK.PSCTRL, CLK_PSADIV_2_gc | CLK_PSBCDIV_1_1_gc);
     _PROTECTED_WRITE(CLK.CTRL, CLK_SCLKSEL_RC32M_gc);
-    CLK.USBCTRL = CLK_USBSRC_RC32M_gc;
+    _PROTECTED_WRITE(CLK.USBCTRL, CLK_USBSRC_RC32M_gc | CLK_USBSEN_bm);
 }
 
 void xmegaser_clock_fast_pll(void)
@@ -27,17 +29,17 @@ void xmegaser_clock_fast_pll(void)
     // intRC at 32 MHz
     // *3, /2 for USB
     // direct for sysclk
+
     OSC.CTRL |= OSC_RC32MEN_bm;
     while (!(OSC.CTRL & OSC_RC32MRDY_bm));
 
-    OSC.PLLCTRL = OSC_PLLSRC_RC32M_gc | /* multiplier */ 3;
+    OSC.PLLCTRL = OSC_PLLSRC_RC32M_gc | /* multiplier */ 12;
     OSC.CTRL |= OSC_PLLEN_bm;
     while (!(OSC.STATUS & OSC_PLLRDY_bm));
 
     _PROTECTED_WRITE(CLK.PSCTRL, CLK_PSADIV_1_gc | CLK_PSBCDIV_1_1_gc);
     _PROTECTED_WRITE(CLK.CTRL, CLK_SCLKSEL_RC32M_gc);
-
-    CLK.USBCTRL = CLK_USBSRC_PLL_gc | CLK_USBPSDIV_2_gc;
+    _PROTECTED_WRITE(CLK.USBCTRL, CLK_USBPSDIV_2_gc | CLK_USBSRC_PLL_gc | CLK_USBSEN_bm);
 }
 
 void xmegaser_enable_dfll(enum xmegaser_dfllsrc dfllsrc)

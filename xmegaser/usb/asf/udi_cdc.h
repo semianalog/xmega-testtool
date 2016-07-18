@@ -39,6 +39,7 @@
 #define _UDI_CDC_H_
 
 #include "xmegaser_config.h"
+#include <usb/xmegaser_conf_usb.h>
 #include <usb/asf/usb_protocol.h>
 #include <usb/asf/usb_protocol_cdc.h>
 #include <usb/asf/udd.h>

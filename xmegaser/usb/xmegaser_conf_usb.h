@@ -2,6 +2,7 @@
 #define XMEGASER_CONF_USB_H
 
 #include <usb/xmegaser_usb_callbacks.h>
+#include <usb/asf/udi_cdc_conf.h>
 
 #define  UDI_CDC_ENABLE_EXT(port)         xmegaser__cdc_enable(port)
 #define  UDI_CDC_DISABLE_EXT(port)        xmegaser__cdc_disable(port)

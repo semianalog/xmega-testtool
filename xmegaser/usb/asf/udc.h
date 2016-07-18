@@ -39,6 +39,7 @@
 #define _UDC_H_
 
 #include "xmegaser_config.h"
+#include <usb/xmegaser_conf_usb.h>
 #include <usb/asf/compiler.h>
 #include <usb/asf/usb_protocol.h>
 #include <usb/asf/udc_desc.h>
